@@ -120,8 +120,9 @@ var GameState = {
 
     this.grassGroup = game.add.group();
     this.world.add(this.grassGroup);
-  
-    for(var i = 0; i < 1000; i++){
+
+    if(!Phaser.Device.touch){
+      for(var i = 0; i < 1000; i++){
       var grass = this.grassGroup.create(game.rnd.integerInRange(0, this.game.world.width/3), game.rnd.integerInRange(0, this.game.world.height/3), 'grass', game.rnd.integerInRange(0,7));
       grass.anchor.setTo(.5, .5);
       game.physics.enable(grass, Phaser.Physics.ARCADE);
@@ -134,6 +135,7 @@ var GameState = {
       grass.body.checkCollision.any = false;
       grass.body.setSize(24,9,-9,3);
     }
+  }
 
     this.slimes = game.add.group();
     this.world.add(this.slimes);
