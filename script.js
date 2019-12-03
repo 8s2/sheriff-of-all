@@ -326,8 +326,9 @@ var GameState = {
       this.lasso.visible = false;
     }
 
-    this.crosshair.x = Math.floor(game.input.mousePointer.x/3);
-    this.crosshair.y = Math.floor(game.input.mousePointer.y/3);
+
+    this.crosshair.x = Math.floor(game.input.pointer1.x/3);
+    this.crosshair.y = Math.floor(game.input.pointer1.y/3);
 
   },
   render: function(){
