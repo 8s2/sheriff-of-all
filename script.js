@@ -121,7 +121,7 @@ var GameState = {
     this.grassGroup = game.add.group();
     this.world.add(this.grassGroup);
 
-    if(false){
+    if(!Phaser.Device.touch){
       for(var i = 0; i < 1000; i++){
       var grass = this.grassGroup.create(game.rnd.integerInRange(0, this.game.world.width/3), game.rnd.integerInRange(0, this.game.world.height/3), 'grass', game.rnd.integerInRange(0,7));
       grass.anchor.setTo(.5, .5);
@@ -329,8 +329,8 @@ var GameState = {
     }
 
 
-    this.crosshair.x = Math.floor(game.input.pointer1.x/3);
-    this.crosshair.y = Math.floor(game.input.pointer1.y/3);
+    this.crosshair.x = Math.floor(game.input.mousePointer.x/3);
+    this.crosshair.y = Math.floor(game.input.nousePointer.y/3);
 
   },
   render: function(){
