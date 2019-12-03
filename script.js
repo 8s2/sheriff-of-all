@@ -121,7 +121,7 @@ var GameState = {
     this.grassGroup = game.add.group();
     this.world.add(this.grassGroup);
 
-    if(!Phaser.Device.touch){
+    if(!Phaser.Device.touch && !Phaser.Device.mobileSafari){
       for(var i = 0; i < 1000; i++){
       var grass = this.grassGroup.create(game.rnd.integerInRange(0, this.game.world.width/3), game.rnd.integerInRange(0, this.game.world.height/3), 'grass', game.rnd.integerInRange(0,7));
       grass.anchor.setTo(.5, .5);
