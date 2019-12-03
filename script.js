@@ -71,13 +71,15 @@ var GameState = {
     game.cache.addTilemap('dynamicMap', null, data, Phaser.Tilemap.CSV);
     map = game.add.tilemap('dynamicMap', 24, 24);
     map.addTilesetImage('dirt_tiles', 'dirt_tiles', 24, 24);
-    layer = map.createLayer(0);
-    // layer.scale.setTo(3,3);
+    map.setCollisionBetween(4, 11);
+    game.physics.enable(map, Phaser.Physics.ARCADE);
+    this.tiles = map.createLayer(0);
+    game.physics.enable(this.tiles, Phaser.Physics.ARCADE);
 
     this.world = game.add.group();
 
 
-    this.crosshair = this.game.add.sprite(game.input.mousePointer.x, game.input.mousePointer.y, "crosshair");
+    this.crosshair = this.game.add.sprite(game.input.activePointer.x, game.input.activePointer.y, "crosshair");
     this.crosshair.anchor.setTo(0.5, 0.5);
 
     this.gun = this.world.create(this.game.world.centerX, this.game.world.centerY, "gun");
@@ -109,7 +111,7 @@ var GameState = {
     this.lasso.anchor.setTo(.25, 0.8);
     game.physics.enable(this.lasso, Phaser.Physics.ARCADE);
 
-    this.emitter = game.add.emitter(game.input.mousePointer.x, game.input.mousePointer.y, 1000);
+    this.emitter = game.add.emitter(game.input.activePointer.x, game.input.activePointer.y, 1000);
     this.emitter.gravity = 0;
     this.emitter.particleDrag.x = 20;
     this.emitter.particleDrag.y = 20;
@@ -145,7 +147,7 @@ var GameState = {
     this.slime_explosion.particleDrag.y = 400;
     this.slime_explosion.makeParticles('slime_particles', [0, 1, 2, 3, 4, 5, 6, 7]);
     spawn_timer = game.time.create(false);
-    spawn_timer.loop(2000, function(){
+    spawn_timer.loop(2000000, function(){
       var slime = GameState.slimes.create(
         game.rnd.integerInRange(0, this.game.world.width)/3, game.rnd.integerInRange(0, this.game.world.height)/3, 'slime');
       game.physics.enable(slime, Phaser.Physics.ARCADE);
@@ -205,6 +207,7 @@ var GameState = {
     game.world.children[0].scrollFactorX = 1/3;
     game.world.children[0].scrollFactorY = 1/3;
 
+    game.physics.arcade.collide(this.player, this.tiles);
 
     this.world.sort('y');
     this.grassGroup.sort('y');
@@ -278,7 +281,7 @@ var GameState = {
       this.lasso.scale.set(-1, 1);
     }
     
-    if(game.input.mousePointer.isDown){
+    if(game.input.activePointer.isDown){
       this.gun.animations.play("fire", 16, false, false);
       this.weapon.fire();
     }
@@ -329,12 +332,14 @@ var GameState = {
     }
 
 
-    this.crosshair.x = Math.floor(game.input.mousePointer.x/3);
-    this.crosshair.y = Math.floor(game.input.nousePointer.y/3);
+    this.crosshair.x = Math.floor(game.input.activePointer.x/3);
+    this.crosshair.y = Math.floor(game.input.activePointer.y/3);
 
   },
   render: function(){
     game.debug.text('FPS: ' + game.time.fps || 'FPS: --', 40, 40, "#ffffff", "40px Courier");
+    game.debug.body(this.player);
+    game.debug.body(this.tiles, "rgba(255, 0, 0, .5)");
   }
 };
 
