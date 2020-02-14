@@ -10,6 +10,7 @@ var GameState = {
   preload: function(){
     game.time.advancedTiming = true;
     this.load.image('dirt_tiles', 'assets/dirt_tiles.png');
+    this.load.image('tiles', 'assets/tiles.png');
     this.load.spritesheet("sheriff", "assets/sheriff.png", 24, 24);
     this.load.spritesheet("spark", "assets/spark.png", 1, 1);
     this.load.spritesheet("gun", "assets/gun.png", 16, 16);
@@ -59,28 +60,42 @@ var GameState = {
       space: game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR)
     }
 
-    var data = '1 ,1 ,6 ,0 ,0 ,0 ,0 ,13,14,1 ,1 ,1 ,1, 1 ,1 ,1'+'\n'+
-               '1 ,1 ,9 ,0 ,0 ,0 ,11,1 ,1 ,1 ,15,1 ,1 ,1 ,1 ,1'+'\n'+
-               '1 ,1 ,1 ,9 ,10,8 ,1 ,1 ,1 ,1 ,6 ,5 ,1 ,1 ,1 ,1'+'\n'+
-               '1 ,1 ,1 ,1 ,1 ,17,1 ,1 ,1 ,1 ,6 ,0 ,4 ,4 ,4 ,1'+'\n'+
-               '1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,3 ,0 ,10,0 ,0 ,10,1'+'\n'+
-               '1 ,1 ,1 ,7 ,1 ,1 ,12,4 ,4 ,0 ,8 ,1 ,9 ,11,1 ,1'+'\n'+
-               '1 ,3 ,5 ,1 ,1 ,1 ,1 ,9 ,10,0 ,8 ,1 ,1 ,1 ,1 ,1'+'\n'+
-               '1 ,9 ,0 ,5 ,1 ,1 ,1 ,1 ,1 ,9 ,10,5 ,1 ,1 ,1 ,1'+'\n'+
-               '1 ,1 ,9 ,11,1 ,1 ,1 ,1 ,1 ,1 ,1 ,9 ,5 ,1 ,1 ,1'+'\n';
+    var data = '128,128,128,128,128,128,128,128,128,128,162,130,131,130,131'+'\n'+
+               '128,144,163,163,163,145,128,128,128,128,160,150,149,150,130'+'\n'+
+               '128,162,130,130,130,146,128,144,163,163,163,164,161,160,147'+'\n'+
+               '128,162,131,130,149,161,128,162,130,131,130,165,145,128,128'+'\n'+
+               '128,160,147,147,161,128,144,166,131,131,130,130,165,145,128'+'\n'+
+               '144,163,163,145,128,128,162,130,130,149,150,130,131,146,128'+'\n'+
+               '162,130,149,148,163,163,164,147,147,161,160,147,147,161,128'+'\n'+
+               '160,150,165,166,130,131,146,128,128,128,128,128,128,128,128'+'\n'+
+               '128,160,150,130,131,130,146,128,128,128,128,128,128,128,128'+'\n';
     game.cache.addTilemap('dynamicMap', null, data, Phaser.Tilemap.CSV);
     map = game.add.tilemap('dynamicMap', 24, 24);
-    map.addTilesetImage('dirt_tiles', 'dirt_tiles', 24, 24);
-    map.setCollisionBetween(4, 11);
-    game.physics.enable(map, Phaser.Physics.ARCADE);
+    map.addTilesetImage('tiles', 'tiles', 24, 24);
     this.tiles = map.createLayer(0);
-    game.physics.enable(this.tiles, Phaser.Physics.ARCADE);
+
+    var data = '-1 ,-1 ,-1 ,-1 ,-1 ,1  ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,6  ,2  '+'\n'+
+               '-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,5  ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 '+'\n'+
+               '-1 ,-1 ,10 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 '+'\n'+
+               '-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,4  ,-1 ,-1 ,-1 ,-1 ,-1 '+'\n'+
+               '-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 '+'\n'+
+               '-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,0  ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 '+'\n'+
+               '11 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 '+'\n'+
+               '-1 ,-1 ,8  ,-1 ,-1 ,6  ,-1 ,-1 ,-1 ,-1 ,-1 ,3  ,-1 ,-1 ,-1 '+'\n'+
+               '-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,7  ,-1 '+'\n';
+    game.cache.addTilemap('dynamicMap', null, data, Phaser.Tilemap.CSV);
+    map2 = game.add.tilemap('dynamicMap', 24, 24);
+    map2.addTilesetImage('tiles', 'tiles', 24, 24);
+    map2.setCollisionBetween(0, 11);
+    game.physics.enable(map2, Phaser.Physics.ARCADE);
+    this.tiles2 = map2.createLayer(0);
+    game.physics.enable(this.tiles2, Phaser.Physics.ARCADE);
 
     this.world = game.add.group();
 
 
     this.crosshair = this.game.add.sprite(game.input.activePointer.x, game.input.activePointer.y, "crosshair");
-    this.crosshair.anchor.setTo(0.5, 0.5);
+    this.crosshair.anchor.setTo(0.5, 0.75);
 
     this.gun = this.world.create(this.game.world.centerX, this.game.world.centerY, "gun");
     this.gun.anchor.setTo(0.1, 0.6);
@@ -120,24 +135,24 @@ var GameState = {
     // this.emitter.start(false, 500, 10);
 
 
-    this.grassGroup = game.add.group();
-    this.world.add(this.grassGroup);
+    // this.grassGroup = game.add.group();
+    // this.world.add(this.grassGroup);
 
-    if(!Phaser.Device.touch){
-      for(var i = 0; i < 1000; i++){
-      var grass = this.grassGroup.create(game.rnd.integerInRange(0, this.game.world.width/3), game.rnd.integerInRange(0, this.game.world.height/3), 'grass', game.rnd.integerInRange(0,7));
-      grass.anchor.setTo(.5, .5);
-      game.physics.enable(grass, Phaser.Physics.ARCADE);
-      grass.body.immovable = true;
-      grass.body.stopVelocityOnCollide = false;
-      grass.body.checkCollision.up = false;
-      grass.body.checkCollision.down = false;
-      grass.body.checkCollision.left = false;
-      grass.body.checkCollision.right = false;
-      grass.body.checkCollision.any = false;
-      grass.body.setSize(24,9,-9,3);
-    }
-  }
+    // if(!Phaser.Device.touch){
+    //   for(var i = 0; i < 1000; i++){
+    //   var grass = this.grassGroup.create(game.rnd.integerInRange(0, this.game.world.width/3), game.rnd.integerInRange(0, this.game.world.height/3), 'grass', game.rnd.integerInRange(0,7));
+    //   grass.anchor.setTo(.5, .5);
+    //   game.physics.enable(grass, Phaser.Physics.ARCADE);
+    //   grass.body.immovable = true;
+    //   grass.body.stopVelocityOnCollide = false;
+    //   grass.body.checkCollision.up = false;
+    //   grass.body.checkCollision.down = false;
+    //   grass.body.checkCollision.left = false;
+    //   grass.body.checkCollision.right = false;
+    //   grass.body.checkCollision.any = false;
+    //   grass.body.setSize(24,9,-9,3);
+    // }
+  // }
 
     this.slimes = game.add.group();
     this.world.add(this.slimes);
@@ -210,7 +225,7 @@ var GameState = {
     game.physics.arcade.collide(this.player, this.tiles);
 
     this.world.sort('y');
-    this.grassGroup.sort('y');
+    // this.grassGroup.sort('y');
     this.slimes.sort('y');
 
     this.weapon.bullets.forEach(function(item){item.rotation = 0});
@@ -220,28 +235,28 @@ var GameState = {
 
     }, null, this);
 
-    game.physics.arcade.collide(this.grassGroup, this.player, function(player, grass){
-      if(
-        !function(){
-          var already_tweened = false;
-          game.tweens._tweens.forEach(function(tween){
-            if(tween.target == grass){
-              already_tweened = true;
-            }
-          });
-          return already_tweened;
-        }() && (GameState.player.body.velocity.x != 0 || GameState.player.body.velocity.y != 0)
-      ){
-        GameState.grass_rustle.play();
-        direction = game.rnd.integerInRange(0,1)*2-1;
-        this.tween_1 = game.add.tween(grass).to({angle:20*direction}, 150, Phaser.Easing.Quadratic.In);
-        this.tween_2 = game.add.tween(grass).to({angle:-10*direction}, 100, Phaser.Easing.Quadratic.In);
-        this.tween_3 = game.add.tween(grass).to({angle:0}, 50, Phaser.Easing.Quadratic.In);
-        this.tween_1.chain(this.tween_2);
-        this.tween_2.chain(this.tween_3);
-        this.tween_1.start();
-      }
-    }, null, this);
+    // game.physics.arcade.collide(this.grassGroup, this.player, function(player, grass){
+    //   if(
+    //     !function(){
+    //       var already_tweened = false;
+    //       game.tweens._tweens.forEach(function(tween){
+    //         if(tween.target == grass){
+    //           already_tweened = true;
+    //         }
+    //       });
+    //       return already_tweened;
+    //     }() && (GameState.player.body.velocity.x != 0 || GameState.player.body.velocity.y != 0)
+    //   ){
+    //     GameState.grass_rustle.play();
+    //     direction = game.rnd.integerInRange(0,1)*2-1;
+    //     this.tween_1 = game.add.tween(grass).to({angle:20*direction}, 150, Phaser.Easing.Quadratic.In);
+    //     this.tween_2 = game.add.tween(grass).to({angle:-10*direction}, 100, Phaser.Easing.Quadratic.In);
+    //     this.tween_3 = game.add.tween(grass).to({angle:0}, 50, Phaser.Easing.Quadratic.In);
+    //     this.tween_1.chain(this.tween_2);
+    //     this.tween_2.chain(this.tween_3);
+    //     this.tween_1.start();
+    //   }
+    // }, null, this);
     game.physics.arcade.overlap(this.weapon.bullets, this.slimes, function(bullet, slime){
       bullet.kill();
       GameState.slime_squish.play();
@@ -338,8 +353,8 @@ var GameState = {
   },
   render: function(){
     game.debug.text('FPS: ' + game.time.fps || 'FPS: --', 40, 40, "#ffffff", "40px Courier");
-    game.debug.body(this.player);
-    game.debug.body(this.tiles, "rgba(255, 0, 0, .5)");
+    // game.debug.body(this.player);
+    // game.debug.body(this.tiles, "rgba(255, 0, 0, .5)");
   }
 };
 
